@@ -37,8 +37,8 @@ pipeline{
             steps{
                 script{
                     docker.withRegistry('', REGISTRY_CRED){
-                    docker_image.push("$BUILD_NUMBER")
-                    docker_image.push "latest"
+                    docker_image.push "${IMAGE_NAME}" + ":" + "${BUILD_NUMBER}"
+                    //docker_image.push "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}":"latest"
                     }
                 }
             }
@@ -62,5 +62,22 @@ pipeline{
                 }
             }
         }
+        stage('Update file and push'){
+            steps{
+                script{
+                    sh """
+                    git config --global user.name "assclic19"
+                    git config --global user.email "anicet93@gmail.com"
+                    git add deployment.yaml
+                    git commit -m "update image version"
+                     """
+             withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                    sh 'git push "https://github.com/assclic19/gitops-project.git" master'
+}
+                }
+            }
+        }
     }
 }
+
+// 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
