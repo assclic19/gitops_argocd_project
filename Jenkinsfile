@@ -37,8 +37,8 @@ pipeline{
             steps{
                 script{
                     docker.withRegistry('', REGISTRY_CRED){
-                    docker_image.push "${IMAGE_NAME}" + ":" + "${BUILD_NUMBER}"
-                    //docker_image.push "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}":"latest"
+                    docker_image.push("$BUILD_NUMBER")
+                    docker_image.push "latest"
                     }
                 }
             }
@@ -80,4 +80,3 @@ pipeline{
     }
 }
 
-// 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
