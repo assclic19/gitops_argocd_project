@@ -33,5 +33,14 @@ pipeline{
                 }
             }
         }
+        stage('Docker push Image'){
+            steps{
+                script{
+                    docker.withRegistry('', REGISTRY_CRED){
+                    docker_image.push("$BUILD_NUMBER")
+                    }
+                }
+            }
+        }
     }
 }
