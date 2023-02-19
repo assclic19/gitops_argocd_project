@@ -51,6 +51,7 @@ pipeline{
                 }
             }
         }
+<<<<<<< HEAD
         stage('Kubernetes deploy file'){
             steps{
                 script{
@@ -77,6 +78,8 @@ pipeline{
                 }
             }
         }
+=======
+>>>>>>> parent of 6bdbffb (kube stage)
     }
 }
 
