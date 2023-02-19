@@ -51,6 +51,32 @@ pipeline{
                 }
             }
         }
-    }
+      stage('Kubernetes deploy file'){
+            steps{
+                script{
+                    sh """
+                    cat deployment.yaml
+                    sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
+                    cat deployment.yaml
+                    """
+               }
+           }
+       }
+       stage('Update file and push'){
+            steps{
+                script{
+                    sh """
+                    git config --global user.name "assclic19"
+                    git config --global user.email "anicet93@gmail.com"
+                    git add deployment.yaml
+                    git commit -m "update image version"
+                     """
+withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+    sh 'git push "https://github.com/assclic19/gitops-project.git" master'
+}
+                }
+            }
+        }
+   }
 }
 
