@@ -2,7 +2,7 @@ pipeline{
 
     agent any
     environment{
-        DOCKERHUB_USERNAME = "Assclic19"
+        DOCKERHUB_USERNAME = "assclic19"
         APP_NAME = "gitops-argocd-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         IMAGE_NAME = "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}"
@@ -38,7 +38,16 @@ pipeline{
                 script{
                     docker.withRegistry('', REGISTRY_CRED){
                     docker_image.push("$BUILD_NUMBER")
+                    docker_image.push "latest"
                     }
+                }
+            }
+        }
+        stage('delete Docker image'){
+            steps{
+                script{
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
                 }
             }
         }
